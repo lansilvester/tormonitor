@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { InvestmentAsset } from '../types';
+import { InvestmentAsset } from '../../../types';
 
 interface AllocationChartProps {
   assets: InvestmentAsset[];
@@ -87,5 +87,3 @@ export function AllocationChart({ assets }: AllocationChartProps) {
     </div>
   );
 }
-
-

@@ -1,9 +1,9 @@
 import { motion } from 'motion/react';
-import { HeroCard } from '../../components/HeroCard';
-import { PerformanceChart } from '../../components/PerformanceChart';
-import { AllocationChart } from '../../components/AllocationChart';
-import { TransactionsTable } from '../../components/TransactionsTable';
-import { InvestmentAsset } from '../../types';
+import { HeroCard } from './HeroCard';
+import { PerformanceChart } from './PerformanceChart';
+import { AllocationChart } from './AllocationChart';
+import { TransactionsTable } from './TransactionsTable';
+import { InvestmentAsset } from '../../../types';
 
 interface OverviewPageProps {
   assets: InvestmentAsset[];

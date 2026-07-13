@@ -1,5 +1,5 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { performanceHistory } from '../data';
+import { performanceHistory } from '../../../data';
 
 export function PerformanceChart() {
   return (
@@ -56,4 +56,3 @@ export function PerformanceChart() {
     </div>
   );
 }
-

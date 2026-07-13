@@ -4,7 +4,8 @@ import { Layout } from './components/layout/Layout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { PlaceholderPage } from './components/ui/PlaceholderPage';
 import { PortfolioPage } from './pages/user/portfolio/PortfolioPage';
-import { OverviewPage } from './pages/user/OverviewPage';
+import { OverviewPage } from './pages/user/overview/OverviewPage';
+import { AuthPage } from './pages/auth/AuthPage';
 import { mockAssets } from './data';
 import { InvestmentAsset } from './types';
 
@@ -13,6 +14,49 @@ export default function App() {
   const [role, setRole] = useState<'user' | 'admin'>('user');
   const [currentPage, setCurrentPage] = useState('Ringkasan');
   const [assets, setAssets] = useState<InvestmentAsset[]>(mockAssets);
+
+  // Custom routing path state
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  
+  // Auth state (initialized from localStorage to persist login session)
+  const [userEmail, setUserEmail] = useState<string | null>(localStorage.getItem('userEmail'));
+
+  // Listen to browser navigation popstate
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleNavigate = (path: string) => {
+    window.history.pushState(null, '', path);
+    setCurrentPath(path);
+  };
+
+  const isAuthPath = currentPath === '/login' || currentPath === '/register' || currentPath === '/forgotpassword';
+
+  // Protect dashboard routes - redirect to login if not authenticated
+  useEffect(() => {
+    if (!userEmail && !isAuthPath) {
+      handleNavigate('/login');
+    } else if (userEmail && isAuthPath) {
+      handleNavigate('/');
+    }
+  }, [userEmail, currentPath, isAuthPath]);
+
+  const handleLoginSuccess = (email: string) => {
+    localStorage.setItem('userEmail', email);
+    setUserEmail(email);
+    handleNavigate('/');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('userEmail');
+    setUserEmail(null);
+    handleNavigate('/login');
+  };
 
   // Switch default page when role changes
   useEffect(() => {
@@ -137,6 +181,31 @@ export default function App() {
     }
   };
 
+  if (isAuthPath) {
+    const authMode = currentPath === '/register' ? 'register' : currentPath === '/forgotpassword' ? 'forgotpassword' : 'login';
+    return (
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <LoadingScreen key="loading" />
+        ) : (
+          <motion.div
+            key="auth-page"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="w-full"
+          >
+            <AuthPage 
+              initialMode={authMode} 
+              onNavigate={handleNavigate} 
+              onLoginSuccess={handleLoginSuccess} 
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    );
+  }
+
   return (
     <AnimatePresence mode="wait">
       {isLoading ? (
@@ -148,7 +217,13 @@ export default function App() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <Layout currentPage={currentPage} onPageChange={setCurrentPage} role={role} onRoleChange={setRole}>
+          <Layout 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+            role={role} 
+            onRoleChange={setRole}
+            onLogout={handleLogout}
+          >
             <AnimatePresence mode="wait">
               {renderContent()}
             </AnimatePresence>

@@ -144,6 +144,8 @@ export function AssetForm({ assets, editingAsset, onSave, onCancel, onDelete }: 
               <input
                 type="text"
                 required
+                onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity("Nama aset wajib diisi.")}
+                onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Contoh: Bitcoin (BTC), Saham BCA (BBCA), ORI025, Logam Mulia Antam"
@@ -191,6 +193,8 @@ export function AssetForm({ assets, editingAsset, onSave, onCancel, onDelete }: 
                     type="number"
                     step="any"
                     required
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity("Jumlah unit wajib diisi.")}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                     placeholder="Contoh: 0.156 atau 1500"
@@ -202,6 +206,8 @@ export function AssetForm({ assets, editingAsset, onSave, onCancel, onDelete }: 
                   <input
                     type="number"
                     required
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity("Harga per unit wajib diisi.")}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
                     value={unitPrice}
                     onChange={(e) => setUnitPrice(e.target.value)}
                     placeholder="Contoh: 10250 atau 980000000"
@@ -228,6 +234,8 @@ export function AssetForm({ assets, editingAsset, onSave, onCancel, onDelete }: 
                     type="number"
                     required
                     min="1"
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity("Total nilai investasi wajib diisi.")}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Contoh: 15000000"
@@ -245,6 +253,8 @@ export function AssetForm({ assets, editingAsset, onSave, onCancel, onDelete }: 
                   type="number"
                   step="0.1"
                   required
+                  onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity("Imbal hasil wajib diisi.")}
+                  onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
                   value={currentReturn}
                   onChange={(e) => setCurrentReturn(e.target.value)}
                   placeholder="Contoh: 12.5 atau -5.2"

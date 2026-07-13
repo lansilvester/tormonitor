@@ -7,9 +7,10 @@ interface HeaderProps {
   onMenuClick?: () => void;
   role: 'user' | 'admin';
   onRoleChange: (role: 'user' | 'admin') => void;
+  onLogout?: () => void;
 }
 
-export function Header({ currentPage, onMenuClick, role, onRoleChange }: HeaderProps) {
+export function Header({ currentPage, onMenuClick, role, onRoleChange, onLogout }: HeaderProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -141,8 +142,12 @@ export function Header({ currentPage, onMenuClick, role, onRoleChange }: HeaderP
 
                     <button 
                       onClick={() => {
-                        alert("Terima kasih telah menggunakan Wealth Tracker!");
                         setIsProfileOpen(false);
+                        if (onLogout) {
+                          onLogout();
+                        } else {
+                          alert("Terima kasih telah menggunakan Wealth Tracker!");
+                        }
                       }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left text-xs font-bold text-terracotta hover:bg-terracotta/10 transition-all"
                     >

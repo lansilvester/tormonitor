@@ -9,9 +9,10 @@ interface LayoutProps {
   onPageChange: (page: string) => void;
   role: 'user' | 'admin';
   onRoleChange: (role: 'user' | 'admin') => void;
+  onLogout?: () => void;
 }
 
-export function Layout({ children, currentPage, onPageChange, role, onRoleChange }: LayoutProps) {
+export function Layout({ children, currentPage, onPageChange, role, onRoleChange, onLogout }: LayoutProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
@@ -64,6 +65,7 @@ export function Layout({ children, currentPage, onPageChange, role, onRoleChange
           onMenuClick={() => setIsMobileSidebarOpen(true)}
           role={role}
           onRoleChange={onRoleChange}
+          onLogout={onLogout}
         />
         <div className="p-6 lg:p-10 max-w-7xl mx-auto w-full flex-1">
           {children}

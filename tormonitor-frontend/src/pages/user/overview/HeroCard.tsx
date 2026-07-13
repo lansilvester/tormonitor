@@ -39,5 +39,3 @@ export function HeroCard({ totalValue }: HeroCardProps) {
     </div>
   );
 }
-
-
