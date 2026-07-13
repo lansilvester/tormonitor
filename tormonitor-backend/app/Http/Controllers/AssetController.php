@@ -56,4 +56,33 @@ class AssetController extends Controller
             'data'    => $transaction
         ], 201);
     }
+    // 3. Mengambil Semua Riwayat Transaksi dari Aset Tertentu
+    public function getTransactions($assetId, Request $request)
+    {
+        $asset = $request->user()->assets()->with('transactions')->findOrFail($assetId);
+
+        return response()->json([
+            'status' => 'success',
+            'asset'  => [
+                'ticker'     => $asset->ticker,
+                'asset_name' => $asset->asset_name
+            ],
+            'transactions' => $asset->transactions
+        ]);
+    }
+
+    // 4. Menghapus Catatan Transaksi
+    public function destroyTransaction(Request $request, $transactionId)
+    {
+        // Cari transaksi melalui aset yang dimiliki oleh user yang sedang login
+        $transaction = Transaction::whereHas('asset', function ($query) use ($request) {
+            $query->where('user_id', $request->user()->id);
+        })->findOrFail($transactionId);
+
+        $transaction->delete();
+
+        return response()->json([
+            'message' => 'Catatan transaksi berhasil dihapus'
+        ]);
+    }
 }
